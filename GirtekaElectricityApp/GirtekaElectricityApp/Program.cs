@@ -6,6 +6,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IElectricityService, ElectricityService>();
+builder.Services.AddSingleton<IFileReaderService, FileReaderService>();
 
 var app = builder.Build();
 
