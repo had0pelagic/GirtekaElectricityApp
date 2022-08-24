@@ -5,6 +5,10 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GirtekaElectricityApp", "GirtekaElectricityApp\GirtekaElectricityApp.csproj", "{ADFEF344-62E8-4CF2-94FF-B9EB0F36703B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GirtekaElectricityDomain", "GirtekaElectricityDomain\GirtekaElectricityDomain.csproj", "{E008A9EC-8C5A-45C4-BA78-44E5705765F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GirtekaElectricityInfrastructure", "GirtekaElectricityInfrastructure\GirtekaElectricityInfrastructure.csproj", "{40FD995C-0CAC-4BB6-BC52-669A688716DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{ADFEF344-62E8-4CF2-94FF-B9EB0F36703B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADFEF344-62E8-4CF2-94FF-B9EB0F36703B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADFEF344-62E8-4CF2-94FF-B9EB0F36703B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E008A9EC-8C5A-45C4-BA78-44E5705765F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E008A9EC-8C5A-45C4-BA78-44E5705765F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E008A9EC-8C5A-45C4-BA78-44E5705765F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E008A9EC-8C5A-45C4-BA78-44E5705765F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40FD995C-0CAC-4BB6-BC52-669A688716DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40FD995C-0CAC-4BB6-BC52-669A688716DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40FD995C-0CAC-4BB6-BC52-669A688716DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40FD995C-0CAC-4BB6-BC52-669A688716DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
