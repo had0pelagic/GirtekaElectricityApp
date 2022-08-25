@@ -4,6 +4,6 @@ namespace GirtekaElectricityApp.Services
 {
     public interface IFileReaderService
     {
-        List<ElectricityModel> ReadCsv();
+        Task<List<ElectricityModel>> ReadCsv();
     }
 }

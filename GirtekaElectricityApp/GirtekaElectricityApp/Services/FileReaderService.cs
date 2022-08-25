@@ -7,17 +7,19 @@ namespace GirtekaElectricityApp.Services
     public class FileReaderService : IFileReaderService
     {
         private readonly string _datasetPath;
-        //logging
-        public FileReaderService(IConfiguration configuration)
+        private readonly ILogger<FileReaderService> _logger;
+
+        public FileReaderService(IConfiguration configuration, ILogger<FileReaderService> logger)
         {
             _datasetPath = GetDataPath(configuration);
+            _logger = logger;
         }
 
         /// <summary>
         /// Reads datasets
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public List<ElectricityModel> ReadCsv()
+        public async Task<List<ElectricityModel>> ReadCsv()
         {
             var filePaths = GetFilePaths();
 
@@ -30,7 +32,8 @@ namespace GirtekaElectricityApp.Services
 
             foreach (var file in filePaths)
             {
-                foreach (var line in File.ReadAllLines(file).Skip(1))//skips csv heading
+                var lines = await File.ReadAllLinesAsync(file);
+                foreach (var line in lines.Skip(1))//skips csv heading
                 {
                     var data = line.Split(CsvConstants.Separator);
                     list.Add(new ElectricityModel
@@ -45,6 +48,8 @@ namespace GirtekaElectricityApp.Services
                     });
                 }
             }
+
+            _logger.LogInformation($"Successfully read and created a list containing: {list.Count} values");
 
             return list;
         }
