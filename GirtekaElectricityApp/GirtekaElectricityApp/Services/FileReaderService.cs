@@ -1,4 +1,5 @@
-﻿using GirtekaElectricityApp.Models;
+﻿using GirtekaElectricityApp.Extensions;
+using GirtekaElectricityApp.Models;
 using GirtekaElectricityApp.Util.Constants;
 using GirtekaElectricityApp.Util.Messages;
 
@@ -16,7 +17,7 @@ namespace GirtekaElectricityApp.Services
         }
 
         /// <summary>
-        /// Reads datasets
+        /// Reads all found datasets
         /// </summary>
         /// <exception cref="Exception"></exception>
         public async Task<List<ElectricityModel>> ReadCsv()
@@ -41,7 +42,7 @@ namespace GirtekaElectricityApp.Services
                         Region = data[0],
                         ObjectName = data[1],
                         ObjectType = data[2],
-                        ObjectNumber = data[3],
+                        ObjectNumber = long.TryParse(data[3], out long numResult) ? numResult : null,
                         ElectricityConsumptionPerHour = double.TryParse(data[4], out double conResult) ? conResult : null,
                         Date = DateTime.TryParse(data[5], out DateTime date) ? date : null,
                         GeneratedElectricityPerHour = double.TryParse(data[6], out double genResult) ? genResult : null,
@@ -49,7 +50,7 @@ namespace GirtekaElectricityApp.Services
                 }
             }
 
-            _logger.LogInformation($"Successfully read and created a list containing: {list.Count} values");
+            _logger.LogInformation($"Successfully read and created a {list.GetListType()} list containing: {list.Count} values");
 
             return list;
         }

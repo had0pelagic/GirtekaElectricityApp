@@ -6,7 +6,7 @@ namespace GirtekaElectricityApp.Extensions
     public static class Mappings
     {
         /// <summary>
-        /// Maps filtered electricity to electricity model
+        /// Maps FilteredElectricity to ElectricityModel
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -25,7 +25,7 @@ namespace GirtekaElectricityApp.Extensions
         }
 
         /// <summary>
-        /// Maps electricity to filtered electricity
+        /// Maps Electricity to FilteredElectricity
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -43,6 +43,11 @@ namespace GirtekaElectricityApp.Extensions
             };
         }
 
+        /// <summary>
+        /// Maps ElectricityModel to Electricity
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public static Electricity ToElectricity(this ElectricityModel item)
         {
             return new Electricity

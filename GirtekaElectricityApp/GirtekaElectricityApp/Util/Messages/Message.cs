@@ -10,6 +10,7 @@
         public static class Data
         {
             public static readonly string EmptyTable = "Empty table";
+            public static readonly string EmptyList = "Empty list";
         }
     }
 }

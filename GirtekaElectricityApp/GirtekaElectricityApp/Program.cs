@@ -9,6 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IElectricityService, ElectricityService>();
 builder.Services.AddScoped<IFileReaderService, FileReaderService>();
+builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 builder.Services.AddDbContext<Context>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection"), options =>

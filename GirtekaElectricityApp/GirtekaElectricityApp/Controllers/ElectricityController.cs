@@ -26,15 +26,5 @@ namespace GirtekaElectricityApp.Controllers
 
             return Ok(data);
         }
-
-        /// <summary>
-        /// Clears electricity tables
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("clear")]
-        public async Task ClearDatabase()
-        {
-            await _electricityService.ClearElectricityData();
-        }
     }
 }
