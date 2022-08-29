@@ -26,7 +26,7 @@ namespace GirtekaElectricityApp.Services
         /// <exception cref="Exception"></exception>
         public async Task<List<ElectricityModel>> GetFilteredData()
         {
-            await StoreConsumedData();
+            await StoreConsumedElectricityData();
             await StoreAndFilterElectricityData();
 
             var filteredData = await _context.FilteredElectricity.ToListAsync();
@@ -40,7 +40,7 @@ namespace GirtekaElectricityApp.Services
         /// Stores electricity data from given datasets
         /// </summary>
         /// <returns></returns>
-        private async Task StoreConsumedData()
+        private async Task StoreConsumedElectricityData()
         {
             var data = await _fileReaderService.ReadCsv();
 
@@ -59,7 +59,6 @@ namespace GirtekaElectricityApp.Services
             }
 
             _logger.LogInformation($"Successfully stored {mappedData.GetListType()} {mappedData.Count} values");
-
         }
 
         /// <summary>

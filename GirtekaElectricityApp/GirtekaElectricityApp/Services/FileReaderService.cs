@@ -17,7 +17,7 @@ namespace GirtekaElectricityApp.Services
         }
 
         /// <summary>
-        /// Reads all found datasets
+        /// Reads all found datasets and adds them to a new list
         /// </summary>
         /// <exception cref="Exception"></exception>
         public async Task<List<ElectricityModel>> ReadCsv()
@@ -56,7 +56,7 @@ namespace GirtekaElectricityApp.Services
         }
 
         /// <summary>
-        /// Returns all file names from
+        /// Returns all file paths from dataset folder
         /// </summary>
         /// <returns></returns>
         private List<string> GetFilePaths()
@@ -67,7 +67,7 @@ namespace GirtekaElectricityApp.Services
         }
 
         /// <summary>
-        /// Returns path of the folder which contains datasets
+        /// Returns dataset folder path
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="section"></param>
