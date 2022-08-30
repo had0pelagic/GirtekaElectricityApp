@@ -24,28 +24,32 @@ namespace GirtekaElectricityApp.Services
         /// </summary>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<List<ElectricityModel>> GetFilteredData()
+        public async Task<List<FilteredElectricityModel>> GetFilteredData()
         {
-            await StoreConsumedElectricityData();
-            await StoreAndFilterElectricityData();
-
             var filteredData = await _context.FilteredElectricity.ToListAsync();
+
+            if (filteredData.Count == 0)
+            {
+                _logger.LogError(Message.Data.EmptyList);
+                throw new Exception(Message.Data.EmptyList);
+            }
 
             _logger.LogInformation($"Found {filteredData.GetListType()} {filteredData.Count} values");
 
-            return filteredData.Select(item => item.ToElectricityModel()).ToList();
+            return filteredData.Select(item => item.ToFilteredElectricityModel()).ToList();
         }
 
         /// <summary>
         /// Stores electricity data from given datasets
         /// </summary>
         /// <returns></returns>
-        private async Task StoreConsumedElectricityData()
+        public async Task<string> StoreElectricityData()
         {
-            var data = await _fileReaderService.ReadCsv();
+            var data = await _fileReaderService.ReadDatasets();
 
             if (data.Count == 0)
             {
+                _logger.LogError(Message.Data.EmptyList);
                 throw new Exception(Message.Data.EmptyList);
             }
 
@@ -58,7 +62,10 @@ namespace GirtekaElectricityApp.Services
                 _context.ChangeTracker.Clear();
             }
 
-            _logger.LogInformation($"Successfully stored {mappedData.GetListType()} {mappedData.Count} values");
+            var message = $"Successfully stored {mappedData.GetListType()} {mappedData.Count} values";
+            _logger.LogInformation(message);
+
+            return message;
         }
 
         /// <summary>
@@ -68,12 +75,13 @@ namespace GirtekaElectricityApp.Services
         /// <param name="belowConsumption"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private async Task StoreAndFilterElectricityData(string objectName = "Namas", double belowConsumption = 1)
+        public async Task<string> FilterElectricityData(string objectName = "Namas", double belowConsumption = 1)
         {
             var data = await _context.Electricity.ToListAsync();
 
             if (data.Count == 0)
             {
+                _logger.LogError(Message.Data.EmptyList);
                 throw new Exception(Message.Data.EmptyList);
             }
 
@@ -82,6 +90,9 @@ namespace GirtekaElectricityApp.Services
                 .Select(item => item.ToFilteredElectricity())
                 .ToList();
 
+            _logger.LogInformation($"After filtering with objectName: {objectName} and consumption: {belowConsumption} " +
+                                   $"found {filteredData.Count} values out of original {data.Count} values");
+
             foreach (var list in filteredData.Chunk(1000))
             {
                 await _context.AddRangeAsync(list);
@@ -89,7 +100,10 @@ namespace GirtekaElectricityApp.Services
                 _context.ChangeTracker.Clear();
             }
 
-            _logger.LogInformation($"Successfully filtered and stored {filteredData.GetListType()} {filteredData.Count} values");
+            var message = $"Successfully filtered and stored {filteredData.GetListType()} {filteredData.Count} values";
+            _logger.LogInformation(message);
+
+            return message;
         }
     }
 }

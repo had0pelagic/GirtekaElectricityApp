@@ -1,4 +1,5 @@
 ﻿using GirtekaElectricityApp.Extensions;
+using GirtekaElectricityDomain;
 using GirtekaElectricityInfrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,15 +25,29 @@ namespace GirtekaElectricityApp.Services
             var electricity = await _context.Electricity.ToListAsync();
             var filteredElectricity = await _context.FilteredElectricity.ToListAsync();
 
-            _context.Electricity.RemoveRange(electricity);
-            _context.FilteredElectricity.RemoveRange(filteredElectricity);
-
-            await _context.SaveChangesAsync();
+            await RemoveData(electricity);
+            await RemoveData(filteredElectricity);
 
             string message = $"Successfully cleared {electricity.GetListType()} and {filteredElectricity.GetListType()} tables";
             _logger.LogInformation(message);
 
             return message;
+        }
+
+        /// <summary>
+        /// Removes given data in chunks
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private async Task RemoveData<T>(IList<T> data) where T : class
+        {
+            foreach (var list in data.Chunk(1000))
+            {
+                _context.Set<T>().RemoveRange(list);
+                await _context.SaveChangesAsync();
+                _context.ChangeTracker.Clear();
+            }
         }
     }
 }

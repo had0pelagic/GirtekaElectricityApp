@@ -20,37 +20,62 @@ namespace GirtekaElectricityApp.Services
         /// Reads all found datasets and adds them to a new list
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public async Task<List<ElectricityModel>> ReadCsv()
+        public async Task<List<ElectricityModel>> ReadDatasets()
         {
             var filePaths = GetFilePaths();
 
             if (filePaths.Count == 0)
             {
+                _logger.LogError(Message.File.NotFound);
                 throw new Exception(Message.File.NotFound);
             }
 
             var list = new List<ElectricityModel>();
 
-            foreach (var file in filePaths)
+            foreach (var filePath in filePaths)
             {
-                var lines = await File.ReadAllLinesAsync(file);
-                foreach (var line in lines.Skip(1))//skips csv heading
-                {
-                    var data = line.Split(CsvConstants.Separator);
-                    list.Add(new ElectricityModel
-                    {
-                        Region = data[0],
-                        ObjectName = data[1],
-                        ObjectType = data[2],
-                        ObjectNumber = long.TryParse(data[3], out long numResult) ? numResult : null,
-                        ElectricityConsumptionPerHour = double.TryParse(data[4], out double conResult) ? conResult : null,
-                        Date = DateTime.TryParse(data[5], out DateTime date) ? date : null,
-                        GeneratedElectricityPerHour = double.TryParse(data[6], out double genResult) ? genResult : null,
-                    });
-                }
+                var data = await ReadFile(filePath);
+                list.AddRange(data);
             }
 
-            _logger.LogInformation($"Successfully read and created a {list.GetListType()} list containing: {list.Count} values");
+            _logger.LogInformation($"Successfully read {filePaths.Count} files and created a {list.GetListType()} list containing: {list.Count} values");
+
+            return list;
+        }
+
+        /// <summary>
+        /// Reads given file and return ElectricityModel list
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public async Task<List<ElectricityModel>> ReadFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                _logger.LogError(Message.File.NotFound);
+                throw new Exception(Message.File.NotFound);
+            }
+
+            var list = new List<ElectricityModel>();
+            var lines = await File.ReadAllLinesAsync(filePath);
+            _logger.LogInformation($"Reading file: {filePath}");
+
+            foreach (var line in lines.Skip(1))//skips csv heading
+            {
+                var data = line.Split(CsvConstants.Separator);
+                list.Add(new ElectricityModel
+                {
+                    Region = data[0],
+                    ObjectName = data[1],
+                    ObjectType = data[2],
+                    ObjectNumber = long.TryParse(data[3], out long numResult) ? numResult : null,
+                    ElectricityConsumptionPerHour = double.TryParse(data[4], out double conResult) ? conResult : null,
+                    Date = DateTime.TryParse(data[5], out DateTime date) ? date : null,
+                    GeneratedElectricityPerHour = double.TryParse(data[6], out double genResult) ? genResult : null,
+                });
+            }
+
+            _logger.LogInformation($"Successfully read {filePath} {list.Count} values");
 
             return list;
         }
@@ -74,13 +99,14 @@ namespace GirtekaElectricityApp.Services
         /// <param name="sectionValue"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private static string GetDataPath(IConfiguration configuration, string section = "Paths", string sectionValue = "Datasets")
+        private string GetDataPath(IConfiguration configuration, string section = "Paths", string sectionValue = "Datasets")
         {
             var pathConfig = configuration.GetSection(section);
             var path = Path.Combine(Environment.CurrentDirectory, pathConfig[sectionValue]);
 
             if (!Directory.Exists(path))
             {
+                _logger.LogError(Message.File.NotFound);
                 throw new Exception(Message.File.NotFound);
             }
 

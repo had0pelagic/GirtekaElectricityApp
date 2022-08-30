@@ -21,7 +21,9 @@ namespace GirtekaElectricityApp.Controllers
         [HttpGet("clear-electricity")]
         public async Task<ActionResult<string>> ClearElectricityData()
         {
-            return Ok(await _databaseService.ClearElectricityData());
+            var result = await _databaseService.ClearElectricityData();
+
+            return Ok(result);
         }
     }
 }

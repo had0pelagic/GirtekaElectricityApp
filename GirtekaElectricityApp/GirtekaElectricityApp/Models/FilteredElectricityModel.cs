@@ -1,8 +1,7 @@
-﻿namespace GirtekaElectricityDomain
+﻿namespace GirtekaElectricityApp.Models
 {
-    public class FilteredElectricity
+    public class FilteredElectricityModel
     {
-        public Guid Id { get; set; }
         public string? Region { get; set; }//tinklas
         public string? ObjectName { get; set; }//obt_pavadinimas
         public string? ObjectType { get; set; }//obj_gv_tipas
